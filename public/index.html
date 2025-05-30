@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Object Detection Portal</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <!-- Font Awesome -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <!-- Custom CSS -->
+    <link href="styles.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar p-0">
+          <div class="d-flex flex-column p-3">
+            <h3 class="text-center mb-4">
+              <i class="fas fa-camera me-2"></i> Detection Portal
+            </h3>
+            <ul class="nav nav-pills flex-column mb-auto">
+              <li class="nav-item mb-1">
+                <a
+                  href="#dashboard"
+                  class="nav-link active"
+                  data-bs-toggle="tab"
+                >
+                  <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                </a>
+              </li>
+              <li class="nav-item mb-1">
+                <a href="#detections" class="nav-link" data-bs-toggle="tab">
+                  <i class="fas fa-camera me-2"></i> Recent Detections
+                </a>
+              </li>
+              <li class="nav-item mb-1">
+                <a href="#analytics" class="nav-link" data-bs-toggle="tab">
+                  <i class="fas fa-chart-bar me-2"></i> Analytics
+                </a>
+              </li>
+              <li class="nav-item mb-1">
+                <a href="#configuration" class="nav-link" data-bs-toggle="tab">
+                  <i class="fas fa-sliders-h me-2"></i> Configuration
+                </a>
+              </li>
+              <li class="nav-item mb-1">
+                <a href="#logs" class="nav-link" data-bs-toggle="tab">
+                  <i class="fas fa-exclamation-triangle me-2"></i> Error Logs
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 main-content">
+          <div class="tab-content">
+            <!-- Dashboard Tab -->
+            <div class="tab-pane fade show active" id="dashboard">
+              <h2 class="mb-4">
+                <i class="fas fa-tachometer-alt me-2"></i>System Dashboard
+              </h2>
+
+              <!-- Dashboard Metrics Cards -->
+              <div class="row mb-4">
+                <div class="col-xl-3 col-md-6 mb-4">
+                  <div
+                    class="card card-dashboard card-primary shadow h-100 py-2"
+                  >
+                    <div class="card-body">
+                      <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                          <div
+                            class="text-xs font-weight-bold text-primary text-uppercase mb-1"
+                          >
+                            Active Sessions
+                          </div>
+                          <div
+                            class="h5 mb-0 font-weight-bold text-gray-800"
+                            id="activeSessionsCount"
+                          >
+                            0
+                          </div>
+                          <small class="text-muted"
+                            >Current live detections</small
+                          >
+                        </div>
+                        <div class="col-auto">
+                          <i
+                            class="fas fa-users dashboard-icon text-primary"
+                          ></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-md-6 mb-4">
+                  <div
+                    class="card card-dashboard card-success shadow h-100 py-2"
+                  >
+                    <div class="card-body">
+                      <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                          <div
+                            class="text-xs font-weight-bold text-success text-uppercase mb-1"
+                          >
+                            API Calls (Today)
+                          </div>
+                          <div
+                            class="h5 mb-0 font-weight-bold text-gray-800"
+                            id="apiCallsCount"
+                          >
+                            0
+                          </div>
+                          <small class="text-muted">Total detections</small>
+                        </div>
+                        <div class="col-auto">
+                          <i
+                            class="fas fa-server dashboard-icon text-success"
+                          ></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-md-6 mb-4">
+                  <div
+                    class="card card-dashboard card-warning shadow h-100 py-2"
+                  >
+                    <div class="card-body">
+                      <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                          <div
+                            class="text-xs font-weight-bold text-warning text-uppercase mb-1"
+                          >
+                            Avg Response Time
+                          </div>
+                          <div
+                            class="h5 mb-0 font-weight-bold text-gray-800"
+                            id="avgResponseTime"
+                          >
+                            0ms
+                          </div>
+                          <small class="text-muted">Processing time</small>
+                        </div>
+                        <div class="col-auto">
+                          <i
+                            class="fas fa-clock dashboard-icon text-warning"
+                          ></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-md-6 mb-4">
+                  <div
+                    class="card card-dashboard card-danger shadow h-100 py-2"
+                  >
+                    <div class="card-body">
+                      <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                          <div
+                            class="text-xs font-weight-bold text-danger text-uppercase mb-1"
+                          >
+                            Error Rate
+                          </div>
+                          <div
+                            class="h5 mb-0 font-weight-bold text-gray-800"
+                            id="errorRatePercent"
+                          >
+                            0%
+                          </div>
+                          <small class="text-muted">Failed detections</small>
+                        </div>
+                        <div class="col-auto">
+                          <i
+                            class="fas fa-exclamation-circle dashboard-icon text-danger"
+                          ></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Object Detection Upload Section -->
+              <div class="row mb-4">
+                <div class="col-12">
+                  <div class="card shadow">
+                    <div class="card-header py-3">
+                      <h6 class="m-0 font-weight-bold">
+                        <i class="fas fa-upload me-2"></i>Object Detection
+                      </h6>
+                    </div>
+                    <div class="card-body">
+                      <!-- Upload by File -->
+                      <div class="row mb-4">
+                        <div class="col-md-6">
+                          <h6>
+                            <i class="fas fa-file-upload me-2"></i>Upload Image
+                            File
+                          </h6>
+                          <div class="mb-3">
+                            <input
+                              type="file"
+                              class="form-control"
+                              id="imageFileInput"
+                              accept="image/*"
+                            />
+                            <div class="form-text">
+                              Supported formats: JPG, PNG, GIF, WebP (Max: 10MB)
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            class="btn btn-primary"
+                            id="uploadFileButton"
+                          >
+                            <i class="fas fa-cloud-upload-alt me-2"></i>Detect
+                            Objects
+                          </button>
+                        </div>
+
+                        <!-- Upload by URL -->
+                        <div class="col-md-6">
+                          <h6>
+                            <i class="fas fa-link me-2"></i>Detect from Image
+                            URL
+                          </h6>
+                          <div class="mb-3">
+                            <input
+                              type="url"
+                              class="form-control"
+                              id="imageUrlInput"
+                              placeholder="https://example.com/image.jpg"
+                            />
+                            <div class="form-text">
+                              Enter a direct link to an image file
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            class="btn btn-success"
+                            id="uploadUrlButton"
+                          >
+                            <i class="fas fa-link me-2"></i>Detect from URL
+                          </button>
+                        </div>
+                      </div>
+
+                      <!-- Loading indicator -->
+                      <div
+                        id="loadingIndicator"
+                        class="text-center mb-3"
+                        style="display: none"
+                      >
+                        <div class="spinner-border text-primary" role="status">
+                          <span class="visually-hidden">Processing...</span>
+                        </div>
+                        <p class="mt-2">
+                          Processing image... This may take a few seconds.
+                        </p>
+                      </div>
+
+                      <!-- Results section -->
+                      <div id="detectionResults" style="display: none">
+                        <hr />
+                        <h6>
+                          <i class="fas fa-search-plus me-2"></i>Detection
+                          Results
+                        </h6>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div id="resultImage" class="mb-3">
+                              <!-- Image will be displayed here -->
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div id="resultDetails">
+                              <!-- Detection details will be displayed here -->
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Error section -->
+                      <div
+                        id="errorSection"
+                        class="alert alert-danger"
+                        style="display: none"
+                      >
+                        <h6>
+                          <i class="fas fa-exclamation-triangle me-2"></i>Error
+                        </h6>
+                        <p id="errorMessage"></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Charts Section -->
+              <div class="row mb-4">
+                <div class="col-lg-8">
+                  <div class="card shadow mb-4">
+                    <div
+                      class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
+                    >
+                      <h6 class="m-0 font-weight-bold">
+                        <i class="fas fa-chart-line me-2"></i>API Calls Over
+                        Time
+                      </h6>
+                      <div class="dropdown no-arrow">
+                        <a
+                          class="dropdown-toggle"
+                          href="#"
+                          role="button"
+                          id="dropdownMenuLink"
+                          data-bs-toggle="dropdown"
+                          aria-haspopup="true"
+                          aria-expanded="false"
+                        >
+                          <i
+                            class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"
+                          ></i>
+                        </a>
+                        <div
+                          class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                          aria-labelledby="dropdownMenuLink"
+                        >
+                          <div class="dropdown-header">Time Range:</div>
+                          <a
+                            class="dropdown-item"
+                            href="#"
+                            onclick="updateChartData('hour')"
+                            >Last Hour</a
+                          >
+                          <a
+                            class="dropdown-item"
+                            href="#"
+                            onclick="updateChartData('day')"
+                            >Last 24 Hours</a
+                          >
+                          <a
+                            class="dropdown-item"
+                            href="#"
+                            onclick="updateChartData('week')"
+                            >Last Week</a
+                          >
+                          <div class="dropdown-divider"></div>
+                          <a
+                            class="dropdown-item"
+                            href="#"
+                            onclick="exportChartData()"
+                            >Export Data</a
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div class="chart-area">
+                        <canvas id="apiCallsChart"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                      <h6 class="m-0 font-weight-bold">
+                        <i class="fas fa-chart-pie me-2"></i>Detection
+                        Categories
+                      </h6>
+                    </div>
+                    <div class="card-body">
+                      <div class="chart-pie pb-2">
+                        <canvas id="detectionCategoriesChart"></canvas>
+                      </div>
+                      <div class="mt-4 text-center small">
+                        <span class="me-2">
+                          <i class="fas fa-circle text-primary"></i> People
+                        </span>
+                        <span class="me-2">
+                          <i class="fas fa-circle text-success"></i> Vehicles
+                        </span>
+                        <span class="me-2">
+                          <i class="fas fa-circle text-info"></i> Animals
+                        </span>
+                        <span class="me-2">
+                          <i class="fas fa-circle text-warning"></i> Objects
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- System Status Table -->
+              <div class="row">
+                <div class="col-12">
+                  <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                      <h6 class="m-0 font-weight-bold">
+                        <i class="fas fa-server me-2"></i>System Status
+                      </h6>
+                    </div>
+                    <div class="card-body">
+                      <div class="table-responsive">
+                        <table
+                          class="table table-bordered"
+                          id="systemStatusTable"
+                        >
+                          <thead>
+                            <tr>
+                              <th>Service</th>
+                              <th>Status</th>
+                              <th>Load</th>
+                              <th>Uptime</th>
+                              <th>Last Update</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td colspan="5" class="text-center text-muted">
+                                Loading system status...
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Detections Tab -->
+            <div class="tab-pane fade" id="detections">
+              <h2 class="mb-4">
+                <i class="fas fa-camera me-2"></i>Recent Detections
+              </h2>
+
+              <!-- Search and Filter Section -->
+              <div class="row mb-4">
+                <div class="col-md-6">
+                  <div class="input-group">
+                    <span class="input-group-text">
+                      <i class="fas fa-search"></i>
+                    </span>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Search by device ID, timestamp, or object type..."
+                    />
+                    <button class="btn btn-primary" type="button">
+                      Search
+                    </button>
+                  </div>
+                </div>
+                <div class="col-md-6 text-md-end">
+                  <div class="btn-group" role="group">
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary active"
+                    >
+                      All
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary">
+                      People
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary">
+                      Vehicles
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary">
+                      Animals
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary">
+                      Objects
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Detections Grid -->
+              <div class="row">
+                <!-- Recent detections will be populated here by JavaScript -->
+                <div class="col-12 text-center">
+                  <div class="card shadow">
+                    <div class="card-body py-5">
+                      <div
+                        class="spinner-border text-primary mb-3"
+                        role="status"
+                      >
+                        <span class="visually-hidden">Loading...</span>
+                      </div>
+                      <p class="text-muted">Loading recent detections...</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="text-center mt-3 mb-5">
+                <button class="btn btn-outline-primary">
+                  <i class="fas fa-plus me-2"></i>Load More
+                </button>
+              </div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div class="tab-pane fade" id="analytics">
+              <h2 class="mb-4">
+                <i class="fas fa-chart-bar me-2"></i>Analytics
+              </h2>
+
+              <!-- Usage Statistics -->
+              <div class="card shadow mb-4">
+                <div
+                  class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
+                >
+                  <h6 class="m-0 font-weight-bold">
+                    <i class="fas fa-chart-area me-2"></i>Usage Statistics
+                  </h6>
+                  <div class="btn-group">
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-outline-secondary active"
+                      onclick="updateAnalyticsCharts('day')"
+                    >
+                      Day
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-outline-secondary"
+                      onclick="updateAnalyticsCharts('week')"
+                    >
+                      Week
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-outline-secondary"
+                      onclick="updateAnalyticsCharts('month')"
+                    >
+                      Month
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <h6 class="text-center mb-3">API Calls by Hour</h6>
+                      <div
+                        class="chart-container"
+                        style="position: relative; height: 300px"
+                      >
+                        <canvas id="hourlyUsageChart"></canvas>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <h6 class="text-center mb-3">Response Time Trends</h6>
+                      <div
+                        class="chart-container"
+                        style="position: relative; height: 300px"
+                      >
+                        <canvas id="responseTimeChart"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Charts Row -->
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                      <h6 class="m-0 font-weight-bold">
+                        <i class="fas fa-list-ol me-2"></i>Top Detection
+                        Categories
+                      </h6>
+                    </div>
+                    <div class="card-body">
+                      <div class="chart-bar">
+                        <canvas id="topCategoriesChart"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                      <h6 class="m-0 font-weight-bold">
+                        <i class="fas fa-mobile-alt me-2"></i>Device
+                        Distribution
+                      </h6>
+                    </div>
+                    <div class="card-body">
+                      <div
+                        class="chart-container"
+                        style="position: relative; height: 300px"
+                      >
+                        <canvas id="deviceDistributionChart"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- User Activity Heatmap -->
+              <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold">
+                    <i class="fas fa-calendar-alt me-2"></i>User Activity
+                    Heatmap
+                  </h6>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table
+                      class="table table-bordered text-center"
+                      id="activityHeatmap"
+                    >
+                      <thead>
+                        <tr>
+                          <th>Hour</th>
+                          <th>Monday</th>
+                          <th>Tuesday</th>
+                          <th>Wednesday</th>
+                          <th>Thursday</th>
+                          <th>Friday</th>
+                          <th>Saturday</th>
+                          <th>Sunday</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>00:00</td>
+                          <td style="background-color: rgba(13, 110, 253, 0.1)">
+                            128
+                          </td>
+                          <td style="background-color: rgba(13, 110, 253, 0.1)">
+                            145
+                          </td>
+                          <td style="background-color: rgba(13, 110, 253, 0.1)">
+                            132
+                          </td>
+                          <td style="background-color: rgba(13, 110, 253, 0.1)">
+                            155
+                          </td>
+                          <td style="background-color: rgba(13, 110, 253, 0.1)">
+                            167
+                          </td>
+                          <td style="background-color: rgba(13, 110, 253, 0.2)">
+                            210
+                          </td>
+                          <td style="background-color: rgba(13, 110, 253, 0.2)">
+                            198
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>06:00</td>
+                          <td style="background-color: rgba(13, 110, 253, 0.2)">
+                            245
+                          </td>
+                          <td style="background-color: rgba(13, 110, 253, 0.2)">
+                            228
+                          </td>
+                          <td style="background-color: rgba(13, 110, 253, 0.2)">
+                            252
+                          </td>
+                          <td style="background-color: rgba(13, 110, 253, 0.3)">
+                            264
+                          </td>
+                          <td style="background-color: rgba(13, 110, 253, 0.2)">
+                            243
+                          </td>
+                          <td style="background-color: rgba(13, 110, 253, 0.1)">
+                            178
+                          </td>
+                          <td style="background-color: rgba(13, 110, 253, 0.1)">
+                            156
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>12:00</td>
+                          <td style="background-color: rgba(13, 110, 253, 0.5)">
+                            452
+                          </td>
+                          <td style="background-color: rgba(13, 110, 253, 0.5)">
+                            476
+                          </td>
+                          <td style="background-color: rgba(13, 110, 253, 0.6)">
+                            512
+                          </td>
+                          <td style="background-color: rgba(13, 110, 253, 0.6)">
+                            498
+                          </td>
+                          <td style="background-color: rgba(13, 110, 253, 0.5)">
+                            467
+                          </td>
+                          <td style="background-color: rgba(13, 110, 253, 0.4)">
+                            387
+                          </td>
+                          <td style="background-color: rgba(13, 110, 253, 0.3)">
+                            298
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>18:00</td>
+                          <td style="background-color: rgba(13, 110, 253, 0.7)">
+                            623
+                          </td>
+                          <td style="background-color: rgba(13, 110, 253, 0.7)">
+                            645
+                          </td>
+                          <td style="background-color: rgba(13, 110, 253, 0.8)">
+                            678
+                          </td>
+                          <td style="background-color: rgba(13, 110, 253, 0.9)">
+                            712
+                          </td>
+                          <td style="background-color: rgba(13, 110, 253, 1)">
+                            756
+                          </td>
+                          <td style="background-color: rgba(13, 110, 253, 0.8)">
+                            643
+                          </td>
+                          <td style="background-color: rgba(13, 110, 253, 0.6)">
+                            534
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Performance Metrics -->
+              <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold">
+                    <i class="fas fa-tachometer-alt me-2"></i>Performance
+                    Metrics
+                  </h6>
+                </div>
+                <div class="card-body">
+                  <div class="row mb-4">
+                    <div class="col-xl-3 col-md-6 mb-4">
+                      <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body">
+                          <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                              <div
+                                class="text-xs font-weight-bold text-primary text-uppercase mb-1"
+                              >
+                                Avg. Confidence Score
+                              </div>
+                              <div
+                                class="h5 mb-0 font-weight-bold text-gray-800"
+                                data-metric="avgConfidence"
+                              >
+                                92.7%
+                              </div>
+                            </div>
+                            <div class="col-auto">
+                              <i
+                                class="fas fa-check-circle fa-2x text-gray-300"
+                              ></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                      <div class="card border-left-success shadow h-100 py-2">
+                        <div class="card-body">
+                          <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                              <div
+                                class="text-xs font-weight-bold text-success text-uppercase mb-1"
+                              >
+                                Success Rate
+                              </div>
+                              <div
+                                class="h5 mb-0 font-weight-bold text-gray-800"
+                                data-metric="successRate"
+                              >
+                                97.7%
+                              </div>
+                            </div>
+                            <div class="col-auto">
+                              <i
+                                class="fas fa-thumbs-up fa-2x text-gray-300"
+                              ></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                      <div class="card border-left-info shadow h-100 py-2">
+                        <div class="card-body">
+                          <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                              <div
+                                class="text-xs font-weight-bold text-info text-uppercase mb-1"
+                              >
+                                Avg. Objects per Frame
+                              </div>
+                              <div
+                                class="h5 mb-0 font-weight-bold text-gray-800"
+                                data-metric="avgObjectsPerFrame"
+                              >
+                                2.4
+                              </div>
+                            </div>
+                            <div class="col-auto">
+                              <i class="fas fa-cube fa-2x text-gray-300"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                      <div class="card border-left-warning shadow h-100 py-2">
+                        <div class="card-body">
+                          <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                              <div
+                                class="text-xs font-weight-bold text-warning text-uppercase mb-1"
+                              >
+                                Unique Users (Today)
+                              </div>
+                              <div
+                                class="h5 mb-0 font-weight-bold text-gray-800"
+                                data-metric="uniqueUsers"
+                              >
+                                342
+                              </div>
+                            </div>
+                            <div class="col-auto">
+                              <i class="fas fa-users fa-2x text-gray-300"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Configuration Tab -->
+            <div class="tab-pane fade" id="configuration">
+              <h2 class="mb-4">
+                <i class="fas fa-cog me-2"></i>System Configuration
+              </h2>
+
+              <!-- Detection Parameters -->
+              <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold">
+                    <i class="fas fa-sliders-h me-2"></i>Detection Parameters
+                  </h6>
+                </div>
+                <div class="card-body">
+                  <form>
+                    <div class="mb-3">
+                      <label for="confidenceThreshold" class="form-label">
+                        <i class="fas fa-percentage me-2"></i>Minimum Confidence
+                        Threshold
+                      </label>
+                      <div class="d-flex align-items-center">
+                        <input
+                          type="range"
+                          class="form-range flex-grow-1"
+                          min="0"
+                          max="100"
+                          step="1"
+                          value="50"
+                          id="confidenceThreshold"
+                        />
+                        <span
+                          class="custom-range-label ms-2"
+                          id="confidenceThresholdValue"
+                          >50%</span
+                        >
+                      </div>
+                      <small class="form-text text-muted">
+                        Objects with confidence below this threshold will be
+                        ignored
+                      </small>
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="maxDetections" class="form-label">
+                        <i class="fas fa-list-ol me-2"></i>Maximum Detections
+                        per Frame
+                      </label>
+                      <div class="d-flex align-items-center">
+                        <input
+                          type="range"
+                          class="form-range flex-grow-1"
+                          min="1"
+                          max="20"
+                          step="1"
+                          value="10"
+                          id="maxDetections"
+                        />
+                        <span
+                          class="custom-range-label ms-2"
+                          id="maxDetectionsValue"
+                          >10</span
+                        >
+                      </div>
+                      <small class="form-text text-muted">
+                        Maximum number of objects to detect in each frame
+                      </small>
+                    </div>
+
+                    <div class="row mb-3">
+                      <div class="col-md-6">
+                        <label class="form-label">
+                          <i class="fas fa-tags me-2"></i>Enabled Detection
+                          Categories
+                        </label>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value=""
+                            id="catPeople"
+                            checked
+                          />
+                          <label class="form-check-label" for="catPeople">
+                            <i class="fas fa-user me-1"></i>People
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value=""
+                            id="catVehicles"
+                            checked
+                          />
+                          <label class="form-check-label" for="catVehicles">
+                            <i class="fas fa-car me-1"></i>Vehicles
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value=""
+                            id="catAnimals"
+                            checked
+                          />
+                          <label class="form-check-label" for="catAnimals">
+                            <i class="fas fa-paw me-1"></i>Animals
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value=""
+                            id="catObjects"
+                            checked
+                          />
+                          <label class="form-check-label" for="catObjects">
+                            <i class="fas fa-cube me-1"></i>Common Objects
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <label class="form-label">
+                          <i class="fas fa-cogs me-2"></i>Advanced Options
+                        </label>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="objectTracking"
+                            checked
+                          />
+                          <label class="form-check-label" for="objectTracking">
+                            Enable Object Tracking
+                          </label>
+                        </div>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="autoBoundingBoxColors"
+                          />
+                          <label
+                            class="form-check-label"
+                            for="autoBoundingBoxColors"
+                          >
+                            Auto-colorize Bounding Boxes
+                          </label>
+                        </div>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="saveDetectedImages"
+                            checked
+                          />
+                          <label
+                            class="form-check-label"
+                            for="saveDetectedImages"
+                          >
+                            Save Detection Images
+                          </label>
+                        </div>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="enableLogging"
+                            checked
+                          />
+                          <label class="form-check-label" for="enableLogging">
+                            Enable Detection Logging
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <h6 class="mb-3">
+                      <i class="fas fa-network-wired me-2"></i>API Settings
+                    </h6>
+                    <div class="mb-3">
+                      <label for="apiEndpoint" class="form-label"
+                        >API Endpoint URL</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="apiEndpoint"
+                        value="http://localhost:8080/api/detect"
+                      />
+                    </div>
+
+                    <div class="row mb-3">
+                      <div class="col-md-6">
+                        <label for="apiTimeout" class="form-label"
+                          >API Request Timeout (ms)</label
+                        >
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="apiTimeout"
+                          value="30000"
+                        />
+                      </div>
+                      <div class="col-md-6">
+                        <label for="apiRetries" class="form-label"
+                          >Max API Retries</label
+                        >
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="apiRetries"
+                          value="3"
+                        />
+                      </div>
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <h6 class="mb-3">
+                      <i class="fas fa-camera me-2"></i>Frame Processing
+                    </h6>
+                    <div class="mb-3">
+                      <label for="maxFrameRate" class="form-label"
+                        >Max Processing Frame Rate</label
+                      >
+                      <div class="d-flex align-items-center">
+                        <input
+                          type="range"
+                          class="form-range flex-grow-1"
+                          min="1"
+                          max="10"
+                          step="1"
+                          value="2"
+                          id="maxFrameRate"
+                        />
+                        <span
+                          class="custom-range-label ms-2"
+                          id="maxFrameRateValue"
+                          >2 fps</span
+                        >
+                      </div>
+                      <small class="form-text text-muted">
+                        Maximum frames processed per second during live
+                        detection
+                      </small>
+                    </div>
+
+                    <div class="row mb-3">
+                      <div class="col-md-6">
+                        <label for="imageResolution" class="form-label"
+                          >Image Processing Resolution</label
+                        >
+                        <select class="form-select" id="imageResolution">
+                          <option value="low">Low (640x480)</option>
+                          <option value="medium" selected>
+                            Medium (1280x720)
+                          </option>
+                          <option value="high">High (1920x1080)</option>
+                          <option value="original">Original Size</option>
+                        </select>
+                      </div>
+                      <div class="col-md-6">
+                        <label for="jpegQuality" class="form-label"
+                          >JPEG Quality</label
+                        >
+                        <div class="d-flex align-items-center">
+                          <input
+                            type="range"
+                            class="form-range flex-grow-1"
+                            min="50"
+                            max="100"
+                            step="5"
+                            value="85"
+                            id="jpegQuality"
+                          />
+                          <span
+                            class="custom-range-label ms-2"
+                            id="jpegQualityValue"
+                            >85%</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <h6 class="mb-3">
+                      <i class="fas fa-server me-2"></i>System Settings
+                    </h6>
+                    <div class="mb-3">
+                      <div class="form-check form-switch">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          id="enableSystem"
+                          checked
+                        />
+                        <label class="form-check-label" for="enableSystem">
+                          Enable Object Detection System
+                        </label>
+                      </div>
+                      <small class="form-text text-muted">
+                        Turn on/off the entire detection system
+                      </small>
+                    </div>
+
+                    <div class="mb-3">
+                      <div class="form-check form-switch">
+                        <input
+                          class="form-check-input"
+                          type="checkbox"
+                          id="maintenanceMode"
+                        />
+                        <label class="form-check-label" for="maintenanceMode">
+                          Maintenance Mode
+                        </label>
+                      </div>
+                      <small class="form-text text-muted">
+                        When enabled, API will return a maintenance message
+                      </small>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                      <button
+                        type="button"
+                        class="btn btn-outline-secondary me-md-2"
+                      >
+                        <i class="fas fa-undo me-2"></i>Restore Defaults
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        id="saveConfigButton"
+                      >
+                        <i class="fas fa-save me-2"></i>Save Configuration
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <!-- Model Management -->
+              <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold">
+                    <i class="fas fa-brain me-2"></i>Model Management
+                  </h6>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Model Name</th>
+                          <th>Version</th>
+                          <th>Status</th>
+                          <th>Accuracy</th>
+                          <th>Description</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <i class="fas fa-robot me-2"></i>
+                            <strong>Hugging Face DETR</strong>
+                          </td>
+                          <td>v1.0</td>
+                          <td><span class="badge bg-success">Active</span></td>
+                          <td>92.4%</td>
+                          <td>Facebook DETR ResNet-50 model</td>
+                          <td>
+                            <button class="btn btn-sm btn-outline-primary">
+                              <i class="fas fa-info-circle me-1"></i>Details
+                            </button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <i class="fas fa-eye me-2"></i>
+                            <strong>YOLOv5</strong>
+                          </td>
+                          <td>v5.6</td>
+                          <td>
+                            <span class="badge bg-secondary">Available</span>
+                          </td>
+                          <td>94.8%</td>
+                          <td>Alternative model for comparison</td>
+                          <td>
+                            <button class="btn btn-sm btn-primary">
+                              <i class="fas fa-exchange-alt me-1"></i>Switch to
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary">
+                              <i class="fas fa-info-circle me-1"></i>Details
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Error Logs Tab -->
+            <div class="tab-pane fade" id="logs">
+              <h2 class="mb-4"><i class="fas fa-bug me-2"></i>Error Logs</h2>
+
+              <!-- Search and Filter Section -->
+              <div class="row mb-4">
+                <div class="col-md-8">
+                  <div class="input-group">
+                    <span class="input-group-text">
+                      <i class="fas fa-search"></i>
+                    </span>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Search error logs..."
+                    />
+                    <button class="btn btn-primary" type="button">
+                      Search
+                    </button>
+                  </div>
+                </div>
+                <div class="col-md-4 text-md-end">
+                  <div class="btn-group" role="group">
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary active"
+                    >
+                      All
+                    </button>
+                    <button type="button" class="btn btn-outline-danger">
+                      Errors
+                    </button>
+                    <button type="button" class="btn btn-outline-warning">
+                      Warnings
+                    </button>
+                    <button type="button" class="btn btn-outline-info">
+                      Info
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Log Tabs -->
+              <ul
+                class="nav nav-tabs custom-tabs mb-3"
+                id="logsTabs"
+                role="tablist"
+              >
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link active"
+                    id="api-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#api-logs"
+                    type="button"
+                    role="tab"
+                    aria-controls="api-logs"
+                    aria-selected="true"
+                  >
+                    <i class="fas fa-server me-2"></i>API Errors
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    id="app-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#app-logs"
+                    type="button"
+                    role="tab"
+                    aria-controls="app-logs"
+                    aria-selected="false"
+                  >
+                    <i class="fas fa-desktop me-2"></i>App Errors
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link"
+                    id="system-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#system-logs"
+                    type="button"
+                    role="tab"
+                    aria-controls="system-logs"
+                    aria-selected="false"
+                  >
+                    <i class="fas fa-cogs me-2"></i>System Logs
+                  </button>
+                </li>
+              </ul>
+
+              <!-- Log Content -->
+              <div class="tab-content" id="logsTabContent">
+                <div
+                  class="tab-pane fade show active"
+                  id="api-logs"
+                  role="tabpanel"
+                  aria-labelledby="api-tab"
+                >
+                  <div class="card shadow mb-4">
+                    <div class="card-body">
+                      <div class="text-center text-muted">
+                        <div
+                          class="spinner-border text-primary mb-3"
+                          role="status"
+                        >
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p>Loading error logs...</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="tab-pane fade"
+                  id="app-logs"
+                  role="tabpanel"
+                  aria-labelledby="app-tab"
+                >
+                  <div class="card shadow mb-4">
+                    <div class="card-body">
+                      <div class="text-center text-muted py-5">
+                        <i class="fas fa-info-circle fa-3x mb-3"></i>
+                        <h5>No Application Logs</h5>
+                        <p>No application logs available at this time.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="tab-pane fade"
+                  id="system-logs"
+                  role="tabpanel"
+                  aria-labelledby="system-tab"
+                >
+                  <div class="card shadow mb-4">
+                    <div class="card-body">
+                      <div class="text-center text-muted py-5">
+                        <i class="fas fa-server fa-3x mb-3"></i>
+                        <h5>No System Logs</h5>
+                        <p>No system logs available at this time.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detection Modal -->
+    <div
+      class="modal fade"
+      id="detectionModal"
+      tabindex="-1"
+      aria-labelledby="detectionModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="detectionModalLabel">
+              <i class="fas fa-search-plus me-2"></i>Detection Details
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="text-center mb-3">
+              <img
+                src=""
+                class="img-fluid rounded shadow"
+                alt="Detection detail"
+                style="max-height: 400px; object-fit: contain"
+              />
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <h6>
+                  <i class="fas fa-info-circle me-2"></i>Detection Information
+                </h6>
+                <ul class="list-group list-group-flush mb-3">
+                  <!-- Detection info will be populated by JavaScript -->
+                  <li class="list-group-item text-center text-muted">
+                    <div
+                      class="spinner-border spinner-border-sm me-2"
+                      role="status"
+                    ></div>
+                    Loading detection details...
+                  </li>
+                </ul>
+              </div>
+              <div class="col-md-6">
+                <h6><i class="fas fa-search me-2"></i>Detected Objects</h6>
+                <ul class="list-group list-group-flush">
+                  <!-- Detected objects will be populated by JavaScript -->
+                  <li class="list-group-item text-center text-muted">
+                    <div
+                      class="spinner-border spinner-border-sm me-2"
+                      role="status"
+                    ></div>
+                    Loading detected objects...
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Additional Stats Section -->
+            <div class="row mt-4">
+              <div class="col-12">
+                <div class="card bg-light">
+                  <div class="card-body">
+                    <h6 class="card-title mb-3">
+                      <i class="fas fa-chart-bar me-2"></i>Detection Statistics
+                    </h6>
+                    <div class="row text-center">
+                      <div class="col-4">
+                        <div class="h5 mb-1" id="modalTotalObjects">-</div>
+                        <small class="text-muted">Total Objects</small>
+                      </div>
+                      <div class="col-4">
+                        <div class="h5 mb-1" id="modalAvgConfidence">-</div>
+                        <small class="text-muted">Avg Confidence</small>
+                      </div>
+                      <div class="col-4">
+                        <div class="h5 mb-1" id="modalHighConfidence">-</div>
+                        <small class="text-muted">High Confidence</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              data-bs-dismiss="modal"
+            >
+              <i class="fas fa-times me-2"></i>Close
+            </button>
+            <button type="button" class="btn btn-primary" id="downloadImageBtn">
+              <i class="fas fa-download me-2"></i>Download Image
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-danger"
+              id="deleteRecordBtn"
+            >
+              <i class="fas fa-trash me-2"></i>Delete Record
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
+  </body>
+</html>
