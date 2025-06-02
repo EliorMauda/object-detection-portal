@@ -1,6 +1,6 @@
 // Configuration - Your Spring Boot API URL
-const API_BASE_URL = "https://object-detection-api-production.up.railway.app/api";
-const DASHBOARD_API_URL = "https://object-detection-api-production.up.railway.app/api/dashboard";
+const API_BASE_URL = "https://object-detection-portal-production.up.railway.app/";
+const DASHBOARD_API_URL = "https://object-detection-api-production.up.railway.app/";
 
 // Global chart variables to update them later
 let apiCallsChart;
